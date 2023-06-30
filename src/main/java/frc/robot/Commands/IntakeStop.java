@@ -1,19 +1,19 @@
 package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Subsystems.Intake;
+import frc.robot.Subsystems.IntakeMotor;
 
 public class IntakeStop extends CommandBase {
 
-    private Intake intake;
+    private IntakeMotor intakeMotor;
 
-    public IntakeStop(Intake initalIntake) {
-        intake = initalIntake;  
+    public IntakeStop(IntakeMotor initalIntake) {
+        intakeMotor = initalIntake;  
     }
 
     @Override
     public void initialize() {
-    intake.setIntakeStop();
+    intakeMotor.setIntakeStop();
     }
 
     @Override

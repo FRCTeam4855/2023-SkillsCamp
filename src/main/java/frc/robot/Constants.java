@@ -84,6 +84,8 @@ public class Constants {
     
     
     //Operator Mappings ++++++
-    public static final int INTAKE_FORWARD = 6;
-    public static final int INTAKE_BACKWARD = 5;
+    public static final int INTAKE_FORWARD_RB = 6;
+    public static final int INTAKE_BACKWARD_LB = 5;
+    public static final int INTAKE_UP_X = 3; //X
+    public static final int INTAKE_DOWN_Y = 4; //Y
 }

@@ -21,7 +21,8 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Subsystems.PrettyLights;
 import frc.robot.Subsystems.SwerveDriveSystem;
 import frc.robot.Subsystems.Wheel;
-import frc.robot.Subsystems.Intake;
+import frc.robot.Subsystems.IntakeArm;
+import frc.robot.Subsystems.IntakeMotor;
 import frc.robot.Subsystems.Limelight;
 import frc.robot.Commands.BalanceLR;
 // import frc.robot.Commands.CenterToLimelight;
@@ -29,6 +30,8 @@ import frc.robot.Commands.LightsOnCommand;
 import frc.robot.Commands.Stay;
 import frc.robot.Commands.StrafeByAlliance;
 import frc.robot.Commands.DriveUntilBalanced;
+import frc.robot.Commands.IntakeArmDown;
+import frc.robot.Commands.IntakeArmUp;
 import frc.robot.Commands.IntakeForward;
 import frc.robot.Commands.IntakeReverse;
 import frc.robot.Commands.IntakeStop;
@@ -65,7 +68,9 @@ public class Robot extends TimedRobot {
   private SwerveDriveSystem driveSystem = new SwerveDriveSystem();
   private Limelight limelight = new Limelight();
   private PrettyLights prettyLights1 = new PrettyLights();
-  private Intake frontIntake = new Intake();
+  private IntakeMotor frontIntakeMotor = new IntakeMotor();
+  private IntakeArm frontIntakeArm = new IntakeArm();
+
   ArmSetpoint currentSetpoint;
 
   // command related declarations
@@ -402,20 +407,29 @@ public class Robot extends TimedRobot {
      * .andThen(new MoveArmToSetpoint(armExtend, armPivot, ArmSetpoint.Five))
      * .andThen(balance));
      */
-    if (xboxOperator.getRawButton(INTAKE_FORWARD)) {
+    if (xboxOperator.getRawButton(INTAKE_FORWARD_RB)) {
       CommandScheduler.getInstance().schedule(
-          new IntakeForward(frontIntake));
+          new IntakeForward(frontIntakeMotor));
     } else
       CommandScheduler.getInstance().schedule(
-          new IntakeStop(frontIntake));
+          new IntakeStop(frontIntakeMotor));
 
-    if (xboxOperator.getRawButton(INTAKE_BACKWARD)) {
+    if (xboxOperator.getRawButton(INTAKE_BACKWARD_LB)) {
       CommandScheduler.getInstance().schedule(
-        new IntakeReverse(frontIntake));
+          new IntakeReverse(frontIntakeMotor));
     } else
       CommandScheduler.getInstance().schedule(
-        new IntakeStop(frontIntake));
+          new IntakeStop(frontIntakeMotor));
 
+    if (xboxOperator.getRawButtonPressed(INTAKE_DOWN_Y)) {
+      CommandScheduler.getInstance().schedule(
+          new IntakeArmDown(frontIntakeArm));
+    }
+
+    if (xboxOperator.getRawButtonPressed(INTAKE_UP_X)) {
+      CommandScheduler.getInstance().schedule(
+          new IntakeArmUp(frontIntakeArm));
+    }
   }
 
   // This function is called periodically during test mode.

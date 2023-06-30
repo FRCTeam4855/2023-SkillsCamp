@@ -3,7 +3,7 @@ package frc.robot.Subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-public class Intake {
+public class IntakeMotor {
 
     CANSparkMax intakeMotor = new CANSparkMax(9, MotorType.kBrushless);
 

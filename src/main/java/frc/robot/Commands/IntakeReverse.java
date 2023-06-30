@@ -1,19 +1,19 @@
 package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Subsystems.Intake;
+import frc.robot.Subsystems.IntakeMotor;
 
 public class IntakeReverse extends CommandBase {
 
-    private Intake intake;
+    private IntakeMotor intakeMotor;
 
-    public IntakeReverse(Intake initialIntake) {
-        intake = initialIntake;
+    public IntakeReverse(IntakeMotor initialIntake) {
+        intakeMotor = initialIntake;
     }
 
     @Override
     public void initialize() {
-    intake.setIntakeBackward();
+    intakeMotor.setIntakeBackward();
     }
 
     @Override
