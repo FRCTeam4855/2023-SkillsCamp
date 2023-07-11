@@ -31,6 +31,7 @@ import frc.robot.Commands.Stay;
 import frc.robot.Commands.StrafeByAlliance;
 import frc.robot.Commands.DriveUntilBalanced;
 import frc.robot.Commands.IntakeArmDown;
+import frc.robot.Commands.IntakeArmToggle;
 import frc.robot.Commands.IntakeArmUp;
 import frc.robot.Commands.IntakeForward;
 import frc.robot.Commands.IntakeReverse;
@@ -145,6 +146,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("Field Oriented", fieldOriented); // shows true/false for driver oriented
     SmartDashboard.putNumber("Gyro Get Yaw", gyro.getYaw()); // pulls yaw value
     SmartDashboard.putNumber("Gyro Get Pitch", gyro.getPitch()); // pulls Pitch value
+    SmartDashboard.putBoolean("Is Arm Down", frontIntakeArm.isArmDown());
     // SmartDashboard.putBoolean("Balancing", Balancing.isBalancing); // shows true
     // if robot is attempting to balance
 
@@ -298,7 +300,9 @@ public class Robot extends TimedRobot {
     // gyro.zeroYaw();
     prettyLights1.setLEDs(PrettyLights.CONFETTI);
     fieldOriented = true;
+    frontIntakeArm.armDown(); 
   }
+
   // *************************
   // *****teleopPeriodic******
   // *************************
@@ -430,7 +434,13 @@ public class Robot extends TimedRobot {
       CommandScheduler.getInstance().schedule(
           new IntakeArmUp(frontIntakeArm));
     }
+    if (xboxOperator.getRawButtonPressed(INTAKE_TOGGLE_A)) {
+      CommandScheduler.getInstance().schedule(
+        new IntakeArmToggle(frontIntakeArm));
+    }
   }
+
+
 
   // This function is called periodically during test mode.
   @Override

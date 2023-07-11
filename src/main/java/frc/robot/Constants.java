@@ -88,4 +88,5 @@ public class Constants {
     public static final int INTAKE_BACKWARD_LB = 5;
     public static final int INTAKE_UP_X = 3; //X
     public static final int INTAKE_DOWN_Y = 4; //Y
+    public static final int INTAKE_TOGGLE_A = 1; //A
 }
