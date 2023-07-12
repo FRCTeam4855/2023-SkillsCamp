@@ -30,6 +30,7 @@ import frc.robot.Commands.LightsOnCommand;
 import frc.robot.Commands.Stay;
 import frc.robot.Commands.StrafeByAlliance;
 import frc.robot.Commands.DriveUntilBalanced;
+import frc.robot.Commands.FindRetroTape;
 import frc.robot.Commands.IntakeArmDown;
 import frc.robot.Commands.IntakeArmToggle;
 import frc.robot.Commands.IntakeArmUp;
@@ -46,6 +47,7 @@ import frc.robot.Commands.SwerveDriveStop;
 import frc.robot.Commands.SwerveDriveTurnLeft;
 import frc.robot.Commands.SwerveDriveTurnRight;
 import frc.robot.Constants.ArmSetpoint;
+import frc.robot.Commands.FindRetroTape;
 
 public class Robot extends TimedRobot {
 
@@ -71,7 +73,6 @@ public class Robot extends TimedRobot {
   private PrettyLights prettyLights1 = new PrettyLights();
   private IntakeMotor frontIntakeMotor = new IntakeMotor();
   private IntakeArm frontIntakeArm = new IntakeArm();
-
   ArmSetpoint currentSetpoint;
 
   // command related declarations
@@ -383,6 +384,11 @@ public class Robot extends TimedRobot {
         double yAxisRate = Math.sin(pitchAngleRadians) * -1.8;
         driveSystem.moveManual(0, yAxisRate, 0, 0, Wheel.SpeedSetting.NORMAL);
       }
+    }
+
+    if (xboxDriver.getRawButton(DRIVER_FIND_TAPE_START)) {
+      CommandScheduler.getInstance().schedule(
+        new FindRetroTape(driveSystem));
     }
 
     // if (xboxDriver.getRawButtonPressed(1)) {
