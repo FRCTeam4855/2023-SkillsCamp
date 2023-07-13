@@ -26,7 +26,7 @@ public class SwerveDriveMoveManual extends CommandBase {
 
     @Override
     public void execute() {
-        swerveDriveSystem.moveManual(1, 0, 0, theta_radians, SpeedSetting.NORMAL);
+        swerveDriveSystem.moveVariable(1, 0, 0, theta_radians, SpeedSetting.NORMAL);
         //swerveDriveSystem.stop();
     }
 

@@ -43,7 +43,7 @@ public class BalanceLR extends CommandBase {
         if (Math.abs(gyro.getRoll()) > 2) {
             double rollAngleRadians = rollAngleDegrees * (Math.PI / 180.0);
             double yAxisRate = Math.sin(rollAngleRadians) * -1.8;
-            driveSystem.moveManual(yAxisRate, 0, 0, 0, Wheel.SpeedSetting.NORMAL);
+            driveSystem.moveVariable(yAxisRate, 0, 0, 0, Wheel.SpeedSetting.NORMAL);
         }
         SmartDashboard.putBoolean("Balancing", isBalancing);
         SmartDashboard.putNumber("Balancing", gyro.getRoll());

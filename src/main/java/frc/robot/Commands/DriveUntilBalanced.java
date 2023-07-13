@@ -72,13 +72,13 @@ public class DriveUntilBalanced extends CommandBase {
             }
 
             if(median <= 10 && hasBeenUnbalanced){
-                drivetrain.moveManual(0, 0, 0, 0, Wheel.SpeedSetting.NORMAL);
+                drivetrain.moveVariable(0, 0, 0, 0, Wheel.SpeedSetting.NORMAL);
                 drivetrain.stop();
             } else {
-                drivetrain.moveManual(currentDrive, 0, 0, 0, Wheel.SpeedSetting.NORMAL);
+                drivetrain.moveVariable(currentDrive, 0, 0, 0, Wheel.SpeedSetting.NORMAL);
             }
         } else {
-            drivetrain.moveManual(driveSpeedMs, 0, 0, 0, Wheel.SpeedSetting.NORMAL);
+            drivetrain.moveVariable(driveSpeedMs, 0, 0, 0, Wheel.SpeedSetting.NORMAL);
         }
     }
 
@@ -108,7 +108,7 @@ public class DriveUntilBalanced extends CommandBase {
 
     @Override
     public void end(boolean interrupted){
-        drivetrain.moveManual(0, 0, 0, 0, Wheel.SpeedSetting.NORMAL);
+        drivetrain.moveVariable(0, 0, 0, 0, Wheel.SpeedSetting.NORMAL);
         drivetrain.stop();
     }
 }

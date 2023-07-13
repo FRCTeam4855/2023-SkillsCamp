@@ -25,7 +25,7 @@ import frc.robot.Subsystems.IntakeArm;
 import frc.robot.Subsystems.IntakeMotor;
 import frc.robot.Subsystems.Limelight;
 import frc.robot.Commands.BalanceLR;
-// import frc.robot.Commands.CenterToLimelight;
+import frc.robot.Commands.CenterToLimelight;
 import frc.robot.Commands.LightsOnCommand;
 import frc.robot.Commands.Stay;
 import frc.robot.Commands.StrafeByAlliance;
@@ -48,7 +48,7 @@ import frc.robot.Commands.SwerveDriveTurnLeft;
 import frc.robot.Commands.SwerveDriveTurnRight;
 import frc.robot.Constants.ArmSetpoint;
 import frc.robot.Commands.FindRetroTape;
-
+import frc.robot.Commands.CenterToLimelight;
 public class Robot extends TimedRobot {
 
   private boolean fieldOriented; // robot is in field oriented or robot oriented
@@ -302,6 +302,7 @@ public class Robot extends TimedRobot {
     prettyLights1.setLEDs(PrettyLights.CONFETTI);
     fieldOriented = true;
     frontIntakeArm.armDown(); 
+    driveSystem.stop();
   }
 
   // *************************
@@ -349,7 +350,7 @@ public class Robot extends TimedRobot {
     if (xboxDriver.getAButton()) {
       driveSystem.setStay();
     } else {
-      driveSystem.moveManual(x1, y1, x2, theta_radians, driveSpeed);
+      driveSystem.moveVariable(x1, y1, x2, theta_radians, driveSpeed);
     }
 
     // Reset the relative encoders if you press B button
@@ -382,14 +383,19 @@ public class Robot extends TimedRobot {
       if (Math.abs(gyro.getPitch()) > 2) {
         double pitchAngleRadians = gyro.getPitch() * (Math.PI / 180.0);
         double yAxisRate = Math.sin(pitchAngleRadians) * -1.8;
-        driveSystem.moveManual(0, yAxisRate, 0, 0, Wheel.SpeedSetting.NORMAL);
+        driveSystem.moveVariable(0, yAxisRate, 0, 0, Wheel.SpeedSetting.NORMAL);
       }
     }
 
-    if (xboxDriver.getRawButton(DRIVER_FIND_TAPE_START)) {
+    // if (xboxDriver.getRawButton(DRIVER_FIND_TAPE_START)) {
+    //   CommandScheduler.getInstance().schedule(
+    //     new FindRetroTape(limelight, driveSystem));
+    // }
+    if (xboxDriver.getRawButtonPressed(DRIVER_FIND_TAPE_START)) {
       CommandScheduler.getInstance().schedule(
-        new FindRetroTape(driveSystem));
-    }
+        new FindRetroTape(driveSystem, limelight)
+        .andThen(new CenterToLimelight(limelight, driveSystem)));
+ }
 
     // if (xboxDriver.getRawButtonPressed(1)) {
     // // Command moveLeft = new SwerveDriveMoveLeft(driveSystem, 3);

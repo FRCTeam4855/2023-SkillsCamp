@@ -3,7 +3,7 @@ package frc.robot;
 public class Constants {
     //Constants ++++++++++++
     public static final double JOYSTK_DZONE = .17;                  // global deadzone for all controllers
-    public static final double DRIVE_DEFAULT_SPD = 0.50;               // multiplier
+    public static final double DRIVE_DEFAULT_SPD = 0.20;               // multiplier
     public static final double DRIVE_SLOW_SPD = 0.15;               // multiplier
     public static final double DRIVE_TURBO_SPD = 0.90;               // multiplier
 
@@ -24,7 +24,7 @@ public class Constants {
     public static final double ARM_EXTEND_CENTER_1 = 12; //done
     public static final double ARM_EXTEND_CENTER_2 = 180; 
     public static final double ARM_EXTEND_CENTER_3 = 100;
-    public static final double  ARM_EXTEND_CENTER_4 = 333;
+    public static final double ARM_EXTEND_CENTER_4 = 333;
     public static final double ARM_EXTEND_CENTER_5 = 10;
     public static final double ARM_EXTEND_CENTER_6 = 5; //super high for auton
     public static final double ARM_EXTEND_SLOP = 5;    //acceptable range for arm extension setpoints

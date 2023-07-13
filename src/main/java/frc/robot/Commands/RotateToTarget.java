@@ -7,8 +7,8 @@ import frc.robot.Subsystems.Limelight;
 import frc.robot.Subsystems.SwerveDriveSystem;
 import frc.robot.Subsystems.Wheel;
 
-public class CenterToLimelight extends CommandBase {
-    
+public class RotateToTarget extends CommandBase {
+
     double Kp = -0.05;
     double min_command = 0.05;
     double heading_setpoint = 3;
@@ -17,7 +17,7 @@ public class CenterToLimelight extends CommandBase {
     private Limelight limelight;
     private SwerveDriveSystem swerveDriveSystem;
 
-    public CenterToLimelight(Limelight initialLimelightSystem, SwerveDriveSystem initialSwerveDriveSystem) {
+    public RotateToTarget(Limelight initialLimelightSystem, SwerveDriveSystem initialSwerveDriveSystem) {
         limelight = initialLimelightSystem;
         swerveDriveSystem = initialSwerveDriveSystem;
     }
@@ -34,10 +34,11 @@ public class CenterToLimelight extends CommandBase {
         double tx = NetworkTableInstance.getDefault().getTable("limelight-rams").getEntry("tx").getDouble(0);
         heading_error = tx;
         if (Math.abs(heading_error) > heading_setpoint) {
-                swerveDriveSystem.moveVariable(Kp * heading_error + min_command, 0, 0, 0, Wheel.SpeedSetting.PRECISE);
+            swerveDriveSystem.spinCounterclockwise();
+        } else {
+            swerveDriveSystem.spinClockwise();
         }
     }
-
 
     @Override
     public boolean isFinished() { // specifies end conditions

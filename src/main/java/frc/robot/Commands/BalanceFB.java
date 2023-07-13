@@ -34,7 +34,7 @@ public class BalanceFB extends CommandBase {
         @Override
         public void execute() {
             if (Math.abs( gyro.getPitch()) > 2) {
-            driveSystem.moveManual(0, gyro.getPitch() / -30 +
+            driveSystem.moveVariable(0, gyro.getPitch() / -30 +
             gyro.getPitch()/Math.abs( gyro.getPitch()) *-.1, 0, 0,
             Wheel.SpeedSetting.PRECISE);
             }
