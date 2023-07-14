@@ -38,8 +38,5 @@ public class BasicMovements extends SubsystemBase implements GenericDriveSystem 
     public void stop() {
     }
 
-    @Override
-    public void stay() {
-    }
 
 }

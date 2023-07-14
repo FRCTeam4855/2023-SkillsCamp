@@ -14,8 +14,8 @@ public class RotateToTarget extends CommandBase {
     double heading_setpoint = 3;
     double initTime;
     double heading_error;
-    private Limelight limelight;
-    private SwerveDriveSystem swerveDriveSystem;
+    private final Limelight limelight;
+    private final SwerveDriveSystem swerveDriveSystem;
 
     public RotateToTarget(Limelight initialLimelightSystem, SwerveDriveSystem initialSwerveDriveSystem) {
         limelight = initialLimelightSystem;

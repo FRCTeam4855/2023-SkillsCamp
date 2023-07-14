@@ -8,6 +8,8 @@
 package frc.robot;
 
 import static frc.robot.Constants.*;
+
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -21,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Subsystems.PrettyLights;
 import frc.robot.Subsystems.SwerveDriveSystem;
 import frc.robot.Subsystems.Wheel;
+import frc.robot.Subsystems.Limelight.doesLimelightHaveTarget;
 import frc.robot.Subsystems.IntakeArm;
 import frc.robot.Subsystems.IntakeMotor;
 import frc.robot.Subsystems.Limelight;
@@ -49,6 +52,7 @@ import frc.robot.Commands.SwerveDriveTurnRight;
 import frc.robot.Constants.ArmSetpoint;
 import frc.robot.Commands.FindRetroTape;
 import frc.robot.Commands.CenterToLimelight;
+import frc.robot.Commands.FindAprilTag;
 public class Robot extends TimedRobot {
 
   private boolean fieldOriented; // robot is in field oriented or robot oriented
@@ -154,6 +158,12 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run(); // must be called from the robotPeriodic() method Robot class or the scheduler
                                           // will never run, and the command framework will not work
 
+    // this calculation is used for swerve depending on fieldOriented or
+    // robotOriented
+    if (fieldOriented) {
+      theta_radians = gyro.getYaw() * Math.PI / 180; // FieldOriented (whatever encoder 0 value is = forward)
+    } else
+      theta_radians = 0; // RobotOriented (robot front is always forward)
   }
 
   @Override
@@ -183,35 +193,21 @@ public class Robot extends TimedRobot {
 
       case kAuton1:
         CommandScheduler.getInstance().schedule(
-            new LightsOnCommand(prettyLights1, PrettyLights.RAINBOW_GLITTER)
-                // .andThen(new MoveArmToSetpoint(armExtend, armPivot, ArmSetpoint.One,
-                // currentSetpoint))
-                // .andThen(new ClosePaws(intakePaws))
-                // .andThen(new SwerveDriveMoveBackward(driveSystem, 20))
-                // .andThen(new SwerveDriveStop(driveSystem))
-                .andThen(new Stay(driveSystem)));
+            new FindRetroTape(driveSystem, limelight)
+        .andThen(new CenterToLimelight(limelight, driveSystem))
+        .andThen(new SwerveDriveStop(driveSystem))
+        );
       default:
         break;
 
       case kAuton2:
+      if (limelight.doesLimelightHaveTarget() == false) {
+          CommandScheduler.getInstance().schedule(
+            new FindAprilTag(driveSystem, limelight));
+      } else {
         CommandScheduler.getInstance().schedule(
-            new LightsOnCommand(prettyLights1, PrettyLights.RAINBOW_GLITTER)
-
-                .andThen(new WaitCommand(1))// manual delays for cone to balance in intake
-                // dropping cone
-                // .andThen(new MoveArmToSetpoint(armExtend, armPivot, ArmSetpoint.Five,
-                // currentSetpoint))
-                // .andThen(new WaitCommand(1))
-                // .andThen(new MoveArmToSetpoint(armExtend, armPivot, ArmSetpoint.One,
-                // currentSetpoint))
-                // .andThen(new WaitCommand(.5))
-                // moving out of community
-                .andThen(new StrafeByAlliance(driveSystem, .75))
-                .andThen(new SwerveDriveMoveBackward(driveSystem, 9.5))
-                // .andThen(new SwerveDriveMoveRight(driveSystem, 7))
-                // .andThen(new SwerveDriveMoveBackward(driveSystem, 8))
-                .andThen(new SwerveDriveStop(driveSystem)));
-
+          new CenterToLimelight(limelight, driveSystem));
+      };
         break;
 
       case kAuton3:
@@ -301,7 +297,7 @@ public class Robot extends TimedRobot {
     // gyro.zeroYaw();
     prettyLights1.setLEDs(PrettyLights.CONFETTI);
     fieldOriented = true;
-    frontIntakeArm.armDown(); 
+    frontIntakeArm.armDown();
     driveSystem.stop();
   }
 
@@ -328,13 +324,6 @@ public class Robot extends TimedRobot {
     // *************************
 
     // additional strafing commands
-
-    // this calculation is used for swerve depending on fieldOriented or
-    // robotOriented
-    if (fieldOriented) {
-      theta_radians = gyro.getYaw() * Math.PI / 180; // FieldOriented (whatever encoder 0 value is = forward)
-    } else
-      theta_radians = 0; // RobotOriented (robot front is always forward)
 
     // Drive the robot
     if ((!xboxDriver.getRawButton(DRV_SPD_TURBO_RB)) && (!xboxDriver.getRawButton(DRV_SPD_PRECISE_LB))) {
@@ -388,14 +377,14 @@ public class Robot extends TimedRobot {
     }
 
     // if (xboxDriver.getRawButton(DRIVER_FIND_TAPE_START)) {
-    //   CommandScheduler.getInstance().schedule(
-    //     new FindRetroTape(limelight, driveSystem));
+    // CommandScheduler.getInstance().schedule(
+    // new FindRetroTape(limelight, driveSystem));
     // }
     if (xboxDriver.getRawButtonPressed(DRIVER_FIND_TAPE_START)) {
       CommandScheduler.getInstance().schedule(
-        new FindRetroTape(driveSystem, limelight)
-        .andThen(new CenterToLimelight(limelight, driveSystem)));
- }
+          new FindRetroTape(driveSystem, limelight)
+              .andThen(new CenterToLimelight(limelight, driveSystem)));
+    }
 
     // if (xboxDriver.getRawButtonPressed(1)) {
     // // Command moveLeft = new SwerveDriveMoveLeft(driveSystem, 3);
@@ -448,11 +437,9 @@ public class Robot extends TimedRobot {
     }
     if (xboxOperator.getRawButtonPressed(INTAKE_TOGGLE_A)) {
       CommandScheduler.getInstance().schedule(
-        new IntakeArmToggle(frontIntakeArm));
+          new IntakeArmToggle(frontIntakeArm));
     }
   }
-
-
 
   // This function is called periodically during test mode.
   @Override

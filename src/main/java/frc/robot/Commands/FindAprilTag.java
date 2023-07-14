@@ -4,12 +4,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.Limelight;
 import frc.robot.Subsystems.SwerveDriveSystem;
 
-public class FindRetroTape extends CommandBase {
+public class FindAprilTag extends CommandBase {
 
     private SwerveDriveSystem swerveDriveSystem;
     private Limelight limelightSystem;
 
-    public FindRetroTape(SwerveDriveSystem initialSwerveDriveSystem, Limelight initialLimelightsystem) {
+    public FindAprilTag(SwerveDriveSystem initialSwerveDriveSystem, Limelight initialLimelightsystem) {
         swerveDriveSystem = initialSwerveDriveSystem;
         limelightSystem = initialLimelightsystem;
         // NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -19,7 +19,7 @@ public class FindRetroTape extends CommandBase {
 
     @Override
     public void initialize() {
-            limelightSystem.setLimelightPipeToRetroTape();
+            limelightSystem.setLimelightPipeToAprilTag();
     }
 
     @Override
